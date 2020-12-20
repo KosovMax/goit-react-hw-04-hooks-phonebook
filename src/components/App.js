@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ContactForm from './ContactForm/ContactForm'
 import ContactList from './ContactList/ContactList'
 import Filter from './Filter/Filter'
 
-import { useLocalStorage } from './../hooks';
+import useLocalStorage from './../hooks/useLocalStorage';
 
 
 export default function App(){
@@ -26,9 +26,13 @@ export default function App(){
         setContacts(prevContacts => ([...prevContacts.filter(contact => contact.id !== id)]));
     }
 
-    const updateFilter = (filter) =>{
-        setFilter(filter);
-    }
+    // const updateFilter = (filter) =>{
+    //     setFilter(filter);
+    // }
+
+    const filterContacts = useMemo(()=>{
+        return contacts.filter(contact => contact.name.toLowerCase().startsWith(filter.toLowerCase()))
+    }, [filter, contacts])
 
 
     return (
@@ -37,8 +41,8 @@ export default function App(){
             <ContactForm onFindName={findName} onAddContact ={addContact} />
 
             <h2>Contacts</h2>
-            <Filter filter={filter} onFilter={updateFilter} />
-            <ContactList contacts={contacts} filter={filter} removeContactId={removeContactId}/> 
+            <Filter filter={filter} onFilter={(state) => setFilter(state)} />
+            <ContactList contacts={filterContacts} removeContactId={removeContactId}/> 
         </>
     );
 }

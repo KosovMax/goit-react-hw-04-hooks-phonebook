@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import './ContactForm.css';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
